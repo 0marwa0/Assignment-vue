@@ -17,17 +17,16 @@
     </v-container>
     <v-container>
       <v-container v-if="listView">
-        <ProductList :items="items" />
+        <ProductList :items="paginatedData" />
       </v-container>
 
       <v-container v-else>
-        <ProductCards :items="items" />
+        <ProductCards :items="paginatedData" />
       </v-container>
-
-      <Pagination
-        :currentPage="currentPage"
-        :itemsPerPage="itemsPerPage"
-        :items="items"
+      <pagination
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        @page-change="changePage"
       /> </v-container
   ></v-main>
 </template>
@@ -46,41 +45,64 @@ import ProductList from '../../components/ProductList.vue'
 import ProductCards from '../../components/ProductCards.vue'
 import axios from 'axios'
 import { getProducts } from '../../stores/api'
-import Pagination from '../../components/shared/pagination.vue'
+import pagination from '../../components/shared/Pagination.vue'
 export default {
   components: {
     ProductList,
     ProductCards,
-    Pagination
+    pagination
   },
+  created() {},
   mounted() {
     axios
       .get('https://fakestoreapi.com/products')
       .then((response) => {
-        this.items = response.data
+        let store = JSON.parse(localStorage.getItem('items'))
+        if (store.length === 0 || store === undefined || store === null) {
+          localStorage.setItem('items', JSON.stringify(response.data))
+        }
         console.log(response.data, 'itemms')
+        const reloaded = localStorage.getItem('reloaded')
+        if (reloaded !== 'true') {
+          localStorage.setItem('reloaded', 'true')
+          window.location.reload()
+        }
       })
       .catch((error) => {
         console.log(error)
       })
   },
+
   data() {
     return {
       listView: true,
-      items: [],
+      items: JSON.parse(localStorage.getItem('items'))
+        ? JSON.parse(localStorage.getItem('items'))
+        : [],
       currentPage: 1,
       itemsPerPage: 4
     }
   },
   computed: {
-    paginatedItems() {
+    totalItems() {
+      return this.items.length
+    },
+    totalPages() {
+      return Math.ceil(this.totalItems / this.itemsPerPage)
+    },
+    paginatedData() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage
       const endIndex = startIndex + this.itemsPerPage
-
       return this.items.slice(startIndex, endIndex)
+    }
+  },
+
+  methods: {
+    localRefresh() {
+      window.location.reload()
     },
-    pages() {
-      return Math.ceil(this.items.length / this.itemsPerPage)
+    changePage(page) {
+      this.currentPage = page
     }
   }
 }
