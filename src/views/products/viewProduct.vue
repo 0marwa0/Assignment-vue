@@ -99,12 +99,15 @@ export default defineComponent({
     axios
       .get(`https://fakestoreapi.com/products/${this.$route.params.id}`)
       .then((response) => {
-        this.product = response.data
-        console.log(response.data, 'sigle item')
+        //this.product = response.data
       })
       .catch((error) => {
         console.log(error)
       })
+    let Store = JSON.parse(localStorage.getItem('items'))
+    Store = Store.filter((item) => item.id === parseInt(this.$route.params.id))
+    this.product = Store[0]
+    console.log(Store[0], this.$route.params.id, 'get item')
   },
   data() {
     return {
