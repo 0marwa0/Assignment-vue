@@ -11,7 +11,9 @@
         </i>
       </div>
       <v-spacer></v-spacer>
-      <router-link to="/new-product"> <v-btn> Add </v-btn></router-link>
+      <router-link :to="{ name: 'product', params: { type: 'create' } }">
+        <v-btn> Add </v-btn></router-link
+      >
     </v-container>
     <v-container>
       <v-container v-if="listView">
