@@ -52,7 +52,7 @@
               :value="product.description"
               variant="underlined"
             ></v-textarea>
-            <v-btn color="#580bcb" @click="type === 'create' ? addProduct() : updateProduct()">
+            <v-btn color="#580bcb" @click="type === 'create' ? handleAdd() : handleUpdate()">
               Save</v-btn
             >
           </div>
@@ -72,6 +72,7 @@
 import { defineComponent } from 'vue'
 import { addProduct } from '../../stores/api'
 import Category from '../../components/shared/category.vue'
+import { updateAPI } from '../../stores/api'
 import axios from 'axios'
 export default defineComponent({
   name: 'new-product',
@@ -88,9 +89,9 @@ export default defineComponent({
         var reader = new FileReader()
         reader.onload = (e) => {
           this.preview = e.target.result
+          this.product.image = e.target.result
         }
         this.image = input.files[0]
-        this.product.image = input.files[0]
         reader.readAsDataURL(input.files[0])
       }
     },
@@ -106,18 +107,13 @@ export default defineComponent({
           console.log(error)
         })
     },
-    updateProduct() {
-      axios
-        .put(`https://fakestoreapi.com/products/${this.$route.params.id}`, this.product)
-        .then((response) => {
-          console.log(response.data, 'result')
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+    handleUpdate() {
+      updateAPI(parseInt(this.$route.params.id), JSON.parse(JSON.stringify(this.product)))
+      this.$router.push('/')
     },
-    addProduct() {
+    handleAdd() {
       addProduct(JSON.parse(JSON.stringify(this.product)))
+      this.$router.push('/')
     },
     handleChange(e, name) {
       this.product[name] = e.target.value
@@ -131,6 +127,7 @@ export default defineComponent({
       imagePlaceHolder: 'https://fakeimg.pl/400x300/?text=product image',
       selectedCategory: '',
       product: {
+        id: JSON.parse(localStorage.getItem('items')).length + 1,
         title: '',
         category: this.selectedCategory,
         price: '',
