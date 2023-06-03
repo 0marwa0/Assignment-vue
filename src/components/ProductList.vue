@@ -23,7 +23,7 @@
                 <router-link :to="{ name: 'view-product', params: { id: item.id } }"
                   >view</router-link
                 >
-                <router-link :to="{ name: 'new-product', params: { id: item.id } }"
+                <router-link :to="{ name: 'product', params: { id: item.id, type: 'edit' } }"
                   >edit</router-link
                 >
                 <p class="pointer" @click="setShowModal(item.id)">Delete</p>
