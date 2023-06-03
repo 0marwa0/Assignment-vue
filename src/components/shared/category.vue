@@ -1,5 +1,8 @@
 <template>
+  <label for="Category">Category:</label>
+
   <v-select
+    id="Category"
     @input="handleChange($event, 'category')"
     variant="underlined"
     :value="selectedCategory"

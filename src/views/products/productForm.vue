@@ -52,7 +52,9 @@
               :value="product.description"
               variant="underlined"
             ></v-textarea>
-            <v-btn color="#580bcb" @click="addProduct">Save</v-btn>
+            <v-btn color="#580bcb" @click="type === 'create' ? addProduct() : updateProduct()">
+              Save</v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -108,7 +110,7 @@ export default defineComponent({
       axios
         .put(`https://fakestoreapi.com/products/${this.$route.params.id}`, this.product)
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data, 'result')
         })
         .catch((error) => {
           console.log(error)
@@ -125,6 +127,7 @@ export default defineComponent({
     return {
       image: null,
       preview: null,
+      type: this.$route.params.type,
       imagePlaceHolder: 'https://fakeimg.pl/400x300/?text=product image',
       selectedCategory: '',
       product: {
