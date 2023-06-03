@@ -7,6 +7,7 @@
           <th>Price</th>
           <th>Description</th>
           <th>Category</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
@@ -16,6 +17,7 @@
           <td>{{ item.price + '$' }}</td>
           <td>{{ item.description }}</td>
           <td>{{ item.category }}</td>
+          <td>{{ item.status ? item.status : 'Out of stock' }}</td>
           <td>
             <div class="dropdown">
               <button class="dropbtn">...</button>
@@ -39,8 +41,8 @@
         <v-card-title> Delete Item</v-card-title>
         <v-card-text>Are you sure you want to delete this item?</v-card-text>
         <v-card-actions>
-          <v-btn color="green darken-1" text @click="showModal = false">Confirm</v-btn>
-          <v-btn color="red darken-1" text @click="onDelete">Cancel</v-btn>
+          <v-btn color="green darken-1" text @click="onDelete">Confirm</v-btn>
+          <v-btn color="red darken-1" text @click="showModal = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
