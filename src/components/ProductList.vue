@@ -12,7 +12,8 @@
           <td>{{ item.price + '$' }}</td>
           <td>{{ item.description }}</td>
           <td>{{ item.category }}</td>
-          <td>{{ item.status ? item.status : 'Out of stock' }}</td>
+          <td v-if="item.status === 'active'" class="status-active">Active</td>
+          <td v-else class="icon-red">Inactive</td>
           <td>
             <div class="dropdown">
               <button class="dropbtn">...</button>
