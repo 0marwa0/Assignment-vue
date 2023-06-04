@@ -29,30 +29,18 @@
         </v-col>
         <v-col cols="12" md="6" class="order-2 order-sm-2">
           <div class="padding">
-            <v-text-field
-              clearable
-              variant="underlined"
-              :value="product.title"
-              autofocus
-              @input="handleChange($event, 'title')"
-            ></v-text-field>
+            <inputText :handleChange="handleChange" lable="title" :value="product.title" />
 
-            <v-text-field
-              @input="handleChange($event, 'price')"
-              clearable
-              :value="product.price"
-              autofocus
-              variant="underlined"
-            ></v-text-field>
+            <inputText :handleChange="handleChange" lable="price" :value="product.price" />
+
             <Category :selectedCategory="selectedCategory" :handleChange="handleChange" />
 
-            <v-textarea
-              @input="handleChange($event, 'description')"
-              clearable
+            <inputText
+              :handleChange="handleChange"
+              lable="description"
               :value="product.description"
-              variant="underlined"
-            ></v-textarea>
-            <v-btn color="#580bcb" @click="type === 'create' ? handleAdd() : handleUpdate()">
+            />
+            <v-btn class="btn-main" @click="type === 'create' ? handleAdd() : handleUpdate()">
               Save</v-btn
             >
           </div>
@@ -62,21 +50,17 @@
   </div>
 </template>
 
-<style>
-.padding {
-  padding: 0;
-}
-</style>
-
 <script>
 import { defineComponent } from 'vue'
 import { addProduct } from '../../stores/api'
 import Category from '../../components/shared/category.vue'
+import inputText from '../../components/shared/inputText.vue'
 import { updateAPI } from '../../stores/api'
 import axios from 'axios'
+import '../../assets/main.css'
 export default defineComponent({
-  name: 'new-product',
-  components: { Category },
+  name: 'Product',
+  components: { Category, inputText },
   mounted() {
     if (this.$route.params.type === 'edit') {
       this.getProduct()
@@ -99,19 +83,24 @@ export default defineComponent({
       axios
         .get(`https://fakestoreapi.com/products/${this.$route.params.id}`)
         .then((response) => {
-          this.product = response.data
-          this.imagePlaceHolder = response.data.image
-          this.selectedCategory = response.data.category
+          // this.product = response.data
+          // this.imagePlaceHolder = response.data.image
+          // this.selectedCategory = response.data.category
         })
         .catch((error) => {
           console.log(error)
         })
+      let Store = JSON.parse(localStorage.getItem('items'))
+      Store = Store.filter((item) => item.id === parseInt(this.$route.params.id))
+      this.imagePlaceHolder = Store[0].image
+      this.product = Store[0]
     },
     handleUpdate() {
       updateAPI(parseInt(this.$route.params.id), JSON.parse(JSON.stringify(this.product)))
       this.$router.push('/')
     },
     handleAdd() {
+      //console.log(JSON.parse(JSON.stringify(this.product)))
       addProduct(JSON.parse(JSON.stringify(this.product)))
       this.$router.push('/')
     },
