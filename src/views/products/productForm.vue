@@ -119,6 +119,7 @@ export default defineComponent({
       product: {
         id: JSON.parse(localStorage.getItem('items')).length + 1,
         title: '',
+        status: 'active',
         category: this.selectedCategory,
         price: '',
         description: '',
