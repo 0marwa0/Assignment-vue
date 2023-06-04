@@ -82,7 +82,7 @@ export default {
         ? JSON.parse(localStorage.getItem('items'))
         : [],
       currentPage: 1,
-      itemsPerPage: 4
+      itemsPerPage: 6
     }
   },
   computed: {
