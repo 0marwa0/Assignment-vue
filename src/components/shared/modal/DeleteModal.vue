@@ -2,7 +2,8 @@
   <div class="text-center">
     <v-dialog v-model="dialog" width="auto">
       <template v-slot:activator="{ props }">
-        <p v-bind="props">Delete</p>
+        <v-icon v-if="showIcon" v-bind="props" small class="icon-red pointer">mdi-delete</v-icon>
+        <p v-else v-bind="props" class="pointer">Delete</p>
       </template>
 
       <v-card>
@@ -22,6 +23,10 @@ defineProps({
   onDelete: {
     type: Function,
     required: true
+  },
+  showIcon: {
+    type: Boolean,
+    required: false
   }
 })
 </script>
