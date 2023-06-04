@@ -2,11 +2,11 @@
   <v-main>
     <v-container class="d-flex">
       <div class="view-switcher">
-        <i class="material-icons" :class="{ active: listView }" @click="listView = true">
+        <i class="material-icons" :class="{ active: listView }" @click="viewList(true)">
           <v-icon>mdi-format-list-bulleted</v-icon>
         </i>
 
-        <i class="material-icons" :class="{ active: !listView }" @click="listView = false">
+        <i class="material-icons" :class="{ active: !listView }" @click="viewList(false)">
           <v-icon>mdi-view-module</v-icon>
         </i>
       </div>
@@ -75,7 +75,9 @@ export default {
 
   data() {
     return {
-      listView: true,
+      listView: localStorage.getItem('viewList')
+        ? JSON.parse(localStorage.getItem('viewList'))
+        : true,
       items: JSON.parse(localStorage.getItem('items'))
         ? JSON.parse(localStorage.getItem('items'))
         : [],
@@ -98,6 +100,10 @@ export default {
   },
 
   methods: {
+    viewList(value) {
+      localStorage.setItem('viewList', JSON.stringify(value))
+      this.localRefresh()
+    },
     localRefresh() {
       window.location.reload()
     },
