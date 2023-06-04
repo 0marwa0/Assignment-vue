@@ -7,10 +7,27 @@
         </v-col>
         <v-col cols="12" md="6" class="order-2 order-sm-2">
           <div class="padding">
-            <h2>{{ product.title }}</h2>
-            <span class="tag">{{ product.price }} $</span>
-            <p>{{ product.category }}</p>
-            <p>{{ product.description }}</p>
+            <v-row>
+              <v-label class="font-weight-bold font-xl">Name : </v-label>
+
+              <h2>{{ product.title }}</h2></v-row
+            >
+            <v-row class="pa-4">
+              <v-label class="font-weight-bold font-xl">Category : </v-label>
+              <span>{{ product.category }}</span>
+            </v-row>
+            <v-row class="pa-4"
+              ><v-label class="font-weight-bold font-xl">Price : </v-label>
+              <span class="tag">{{ product.price }} $</span>
+            </v-row>
+            <v-row class="pa-4">
+              <v-label class="font-weight-bold font-xl">Status : </v-label>
+              <span>{{ product.status ? product.status : 'out of stock' }} </span>
+            </v-row>
+            <v-row class="pa-4">
+              <v-label class="font-weight-bold font-xl">Description : </v-label>
+              <span>{{ product.description }} </span>
+            </v-row>
           </div>
         </v-col>
       </v-row>
@@ -21,6 +38,14 @@
 <style>
 .padding {
   padding: 10% 5%;
+}
+.font-xl {
+  font-size: 40px;
+  color: blueviolet;
+}
+span,
+h2 {
+  padding: 0 10px;
 }
 .tag {
   display: inline-block;
