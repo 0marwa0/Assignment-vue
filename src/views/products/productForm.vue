@@ -33,13 +33,27 @@
 
             <inputText :handleChange="handleChange" lable="price" :value="product.price" />
 
-            <Category :selectedCategory="selectedCategory" :handleChange="handleChange" />
-
+            <v-select
+              v-model="selectedCategory"
+              :items="categories"
+              @update:modelValue="handelCategory"
+              variant="underlined"
+            ></v-select>
+            <v-select
+              v-model="selectedStatus"
+              :items="status"
+              @update:modelValue="handelStatus"
+              variant="underlined"
+            ></v-select>
             <inputText
               :handleChange="handleChange"
               lable="description"
               :value="product.description"
             />
+            <v-snackbar v-model="snackbar" :timeout="timeout" :color="color" top>{{
+              message
+            }}</v-snackbar>
+
             <v-btn class="btn-main" @click="type === 'create' ? handleAdd() : handleUpdate()">
               Save</v-btn
             >
@@ -53,14 +67,14 @@
 <script>
 import { defineComponent } from 'vue'
 import { addProduct } from '../../stores/api'
-import Category from '../../components/shared/category.vue'
 import inputText from '../../components/shared/inputText.vue'
 import { updateAPI } from '../../stores/api'
 import axios from 'axios'
+import { hasEmptyValue } from '../../stores/utilize'
 import '../../assets/main.css'
 export default defineComponent({
   name: 'Product',
-  components: { Category, inputText },
+  components: { inputText },
   mounted() {
     if (this.$route.params.type === 'edit') {
       this.getProduct()
@@ -86,6 +100,7 @@ export default defineComponent({
           // this.product = response.data
           // this.imagePlaceHolder = response.data.image
           // this.selectedCategory = response.data.category
+          console.log(response)
         })
         .catch((error) => {
           console.log(error)
@@ -94,6 +109,7 @@ export default defineComponent({
       Store = Store.filter((item) => item.id === parseInt(this.$route.params.id))
       this.imagePlaceHolder = Store[0].image
       this.selectedCategory = Store[0].category
+      this.selectedStatus = Store[0].status ? Store[0].status : 'inactive'
       this.product = Store[0]
     },
     handleUpdate() {
@@ -101,12 +117,25 @@ export default defineComponent({
       this.$router.push('/')
     },
     handleAdd() {
-      // console.log(JSON.parse(JSON.stringify(this.product)))
-      addProduct(JSON.parse(JSON.stringify(this.product)))
-      this.$router.push('/')
+      const dataToSend = JSON.parse(JSON.stringify(this.product))
+
+      if (hasEmptyValue(dataToSend)) {
+        this.message = 'Please fill all the fields'
+        this.snackbar = true
+      } else {
+        addProduct(dataToSend)
+        this.$router.push('/')
+      }
+    },
+    handelCategory(value) {
+      this.product.category = value
+    },
+    handelStatus(value) {
+      this.product.status = value
     },
     handleChange(e, name) {
       this.product[name] = e.target.value
+      console.log(name, e, 'cat')
     }
   },
   data() {
@@ -114,12 +143,19 @@ export default defineComponent({
       image: null,
       preview: null,
       type: this.$route.params.type,
+      snackbar: false,
+      message: '',
+      timeout: 3000,
+      color: 'error',
       imagePlaceHolder: 'https://fakeimg.pl/400x300/?text=product image',
       selectedCategory: '',
+      selectedStatus: '',
+      categories: ['electronics', 'jewelery', "men's clothing", "women's clothing"],
+      status: ['active', 'inactive'],
       product: {
         id: JSON.parse(localStorage.getItem('items')).length + 1,
         title: '',
-        status: 'active',
+        status: this.selectedStatus,
         category: this.selectedCategory,
         price: '',
         description: '',
