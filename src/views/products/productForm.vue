@@ -6,11 +6,11 @@
           <v-col class="justify-content-space-between" style="height: 100%">
             <v-col>
               <template v-if="preview" :width="100%">
-                <v-img :width="400" :height="300" aspect-ratio="1/1" cover :src="preview"></v-img>
+                <v-img :width="600" :height="300" aspect-ratio="1/1" cover :src="preview"></v-img>
               </template>
               <template v-else="preview">
                 <v-img
-                  :width="400"
+                  :width="600"
                   :height="300"
                   aspect-ratio="1/1"
                   cover
@@ -93,6 +93,7 @@ export default defineComponent({
       let Store = JSON.parse(localStorage.getItem('items'))
       Store = Store.filter((item) => item.id === parseInt(this.$route.params.id))
       this.imagePlaceHolder = Store[0].image
+      this.selectedCategory = Store[0].category
       this.product = Store[0]
     },
     handleUpdate() {
@@ -100,7 +101,7 @@ export default defineComponent({
       this.$router.push('/')
     },
     handleAdd() {
-      //console.log(JSON.parse(JSON.stringify(this.product)))
+      // console.log(JSON.parse(JSON.stringify(this.product)))
       addProduct(JSON.parse(JSON.stringify(this.product)))
       this.$router.push('/')
     },
