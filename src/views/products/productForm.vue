@@ -32,7 +32,7 @@
             <inputText :handleChange="handleChange" lable="title" :value="product.title" />
 
             <inputText :handleChange="handleChange" lable="price" :value="product.price" />
-            <label for="Category">Category:</label>
+            <label for="Category">category:</label>
             <v-select
               v-model="selectedCategory"
               :items="categories"
@@ -40,7 +40,7 @@
               variant="underlined"
             ></v-select>
 
-            <label for="Status">Status:</label>
+            <label for="Status">status:</label>
             <v-select
               v-model="selectedStatus"
               :items="status"
